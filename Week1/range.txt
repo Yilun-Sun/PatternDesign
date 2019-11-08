@@ -1,0 +1,21 @@
+Range
+* @params:
++ start-num     : int
++ end-num       : int
++ left-isIncl   : boolean
++ right-isIncl  : boolean
+
+* @methods:
++ (start-num, end-num): int[]  // default is left-inclusive & right-exclusive
++ (start-num, end-num, left-isIncl : boolean, right-isIncl : boolean): int[]
+
+* @restrictions:
++ start-num < end-num
+
+* @example:
+Range rng_1 = new Range(1, 5);
+>>> rng_1 = [1, 2, 3, 4];
+Range rng_2 = new Range(1, 5, false, false);
+>>> rng_2 = [2, 3, 4];
+Range rng_3 = new Range(5, 1);
+>>> return false / documents [*]
