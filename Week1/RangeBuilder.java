@@ -1,26 +1,31 @@
-public class Range {
+public class RangeBuilder {
     private int start;
     private int end;
     private boolean leftIsInclusive;
     private boolean rightIsInclusive;
 
 
-    public Range(int start, int end) {
+    public RangeBuilder(int start, int end) {
         // default is left-inclusive & right-exclusive
         this.start = start;
         this.end = end;
+        Range 
     }
 
-    public Range() {
+    public RangeBuilder() {
 
     }
 
-    public Range start(int start) {
+    public Range build() {
+        return BuilderToRange;
+    }
+
+    public RangeBuilder start(int start) {
         this.start = start;
         return this;
     }
 
-    public Range end(int end) {
+    public RangeBuilder end(int end) {
         this.end = end;
         return this;
     }
