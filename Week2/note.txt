@@ -1,0 +1,326 @@
+1.
+    设计需求
+
+    Range
+        区间
+
+    一个 范围
+
+    -   开始，结束
+        2, 4
+
+    -   结束 不可能 在 开始之前
+        4, 2 x range
+
+    -   不支持 step
+        2:8:2 -> 2 4 6 8
+
+    -   exclusive, inclusive
+        需要支持
+
+
+    初始设计
+        构造方法/一般方法
+
+        1.  方法？属性？example
+
+        Fraction
+        +   up: int
+        +   down: int
+        +   ()
+        +   (up: int)
+        +   haha(): double
+        +   haha(para1: Type1, para2: Type2): Type3
+
+
+        Fraction f = new Fraction();
+        f.....
+
+
+        - start: int
+        - end: int
+
+        + setRange(int start, int end, int type): void
+
+
+    讨论
+        Range
+        +   start: int
+        +   end: int
+        +   includeStart: bool
+        +   includeEnd: bool
+
+        (s, e)
+        (s, e, is, ie)
+
+        [1, 8]
+        new R(1, 8, t, t);
+
+        [1, 7)
+        new R(1, 7, t, f);
+
+        [0, 5)
+        new R(0, 5, t, f);
+
+        [1, 8]
+        new R(0, 5, t);
+
+        不好：
+        -   不够简单    range(5)
+        -   可读性太差
+
+        1. 默认值
+           会跟 api 产生一定的冲突
+           str.substring(start) s <
+           str.substring(start, end) s <= ? < e
+           str.substring(end)
+           str.substring(0, end)
+           str.substring(s=1, e=3)
+
+
+        2. String
+            design a new lang
+            (exp: String)
+            "[3,4)"
+
+
+        Range range = new Range();
+            0, 0, true, false
+
+        range.setStart(2);
+        range.setEnd(6);
+
+        分析：
+        +   开放
+        +   可读性
+        -   不够简单 （代码太多）
+
+
+Chain 化 API
+
+        Range range = new Range().start(1).end(2);
+
+        ? design issue ?
+        ? 潜在的 增强潜力 ?
+        ？怎么实施？
+        ？实施下，会遇到什么冲突？潜在隐患？
+
+
+
+    第一个版本
+        Range
+        +   ()
+        +   start(value:int): Range
+
+        分析：
+        start 的身份？
+        special setter
+            setStart(): void
+            start(): Range
+
+        +   形成 chain
+        -   start 会占用 range 的 方法名命名列表
+        -   责任不单一
+            帮助 Range 构建的
+            Range 构建后，正常工作使用的
+
+    修改方案 1
+        Range range = Range.start(1).end(2);
+
+        Range.start(1).
+        start():Range  sta
+
+        类名引导，是不可以的
+        可以引导一个方法
+        但不能做 chain 特效
+
+    修改方案 2
+        通过有标志性、标准性的命名规则，暗示方法不是一般方法
+
+        new Range().buildStart().buildEnd();
+
+        分析
+        +   chain 效果
+        +   命名基本不冲突
+        -   简单性。。。
+
+
+
+话题
+    内聚 cohesion
+        相关的东西在一个模块内联系在一起
+
+    耦合 coupling
+        不同的模块联系在一起
+
+    高内聚、低耦合
+
+
+    函数
+        一个函数如果太大
+        内聚很低
+        抽出函数
+
+        一个函数如果太小
+        耦合太高
+        inline function
+
+    类
+        一个类如果太大
+        内聚很低
+        拆分类
+
+        一个类如果太小
+        耦合太高
+        合并类
+
+
+DP1:    Builder
+
+        RangeBuilder
+        +   start():?
+        +   end():?
+        ?
+
+        ？？
+
+        Range range = new RangeBuilder().start(1).end(1).build();
+
+
+        RangeBuilder
+        -   range: Range
+        +   start(v: int): RangeBuilder
+        +   end(v: int): RangeBuilder
+        +   build(): Range
+
+
+        1.
+            new RangeBuilder() 太丑了
+            解决方案
+
+            Range.builder().start(1).end(1).build();
+
+            衍生效果
+            public class Range {
+                public static Builder builder() {
+                    return new Builder();
+                }
+
+                private static class Builder {
+
+                }
+            }
+
+
+        2.
+            Range.builder().start(1).inclusiveStart(true).end(2).inclusiveEnd(false).build();
+
+            分析
+            -   太长
+
+            解决
+            不采用标准 setter 方法命名
+
+            RangeBuilder
+            -   range: Range
+            +   build(): Range
+
+            +   includeStart(v: int): RangeBuilder
+            +   includeEnd(v: int): RangeBuilder
+            +   excludeStart(v: int): RangeBuilder
+            +   excludeEnd(v: int): RangeBuilder
+
+            Range r = Range.builder().includeStart(3).excludeEnd(7).build();
+
+
+
+            [0, 5)
+            Range.builder().excludeEnd(5).build();
+
+
+            Range.of(5) {
+                new Range();
+                range.end = end;
+                range.includeEnd = false;
+                return range;
+            }
+
+        Factory
+            new RangeFactory().createRange(5);
+
+
+
+        应用
+            Chain
+                stream api
+                    collections.stream().map().filter().collect();
+
+                js
+                    let a = 3;
+                    let b = xxx();
+                    expect(b).to.be.equals(a)
+
+            Factory
+                Spring ...
+
+
+    作业
+        写 builder 的实现代码
+
+    设计题
+        Range2
+            不支持 inclu...
+            include start
+            exclude end;
+
+            slice
+
+            string.substring
+
+            ...
+
+            Range r = ...; r [2, 7)
+
+            r.slice(2) -> [4, 7)
+            r.slice(2, 3) -> [4, 5)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

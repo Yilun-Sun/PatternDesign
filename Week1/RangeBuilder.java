@@ -9,16 +9,16 @@ public class RangeBuilder {
         // default is left-inclusive & right-exclusive
         this.start = start;
         this.end = end;
-        Range 
+        // Range 
     }
 
     public RangeBuilder() {
 
     }
 
-    public Range build() {
-        return BuilderToRange;
-    }
+    // public Range build() {
+    //     // return BuilderToRange;
+    // }
 
     public RangeBuilder start(int start) {
         this.start = start;

@@ -11,9 +11,9 @@ public class Range {
         this.end = end;
     }
 
-    public Range() {
+    // public Range() {
 
-    }
+    // }
 
     public Range start(int start) {
         this.start = start;
