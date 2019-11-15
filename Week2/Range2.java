@@ -19,7 +19,7 @@ public class Range2 {
     //     return new Builder();
     // }
     public Range2 of(int endNum) {
-        Range2 range = new Range2.Builder().start(0).end(endNum).build();
+        Range2 range = new Range2.Builder().includeStart(0).excludeEnd(endNum).build();
         return range;
     }
 
@@ -68,12 +68,22 @@ public class Range2 {
 
         public Builder(){}
 
-        public Builder start(int start) {
+        public Builder includeStart(int start) {
             this.start = start;
             return this;
         }
+
+        public Builder excludeStart(int start) {
+            this.start = start + 1;
+            return this;
+        }
     
-        public Builder end(int end) {
+        public Builder includeEnd(int end) {
+            this.end = end + 1;
+            return this;
+        }
+
+        public Builder excludeEnd(int end) {
             this.end = end;
             return this;
         }
